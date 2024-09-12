@@ -1,0 +1,42 @@
+﻿@model S3FileDetails
+
+<table>
+    <tr>
+        <th>FileName</th>
+    </tr>
+    <tr>
+        <td>@Html.DisplayFor(model => model.FileName)</td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+
+    function ShareConfirmDialog(event) {
+
+        var result = confirm("Do you want to continue?");
+
+        if (!result) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+            alert("Không thực hiện share file!");
+        } else {
+            
+            let input = document.createElement('input') // tạo thẻ input giả
+            document.body.appendChild(input) // gán thẻ đó vào bất kì đâu (sao cho không bị ảnh hướng layout nào là được)
+            input.value = "https://bucket-kms-iam.s3.amazonaws.com/@Model.FileName" // gán giá trị vào input
+            input.select()  // focus vào input
+            document.execCommand('copy') // dùng lệnh này để copy text từ input
+            input.remove() // sau đó xóa thẻ
+            alert("Link to file: \n https://bucket-kms-iam.s3.amazonaws.com/@Model.FileName \n Đã thực hiện copy link, Vui lòng Paste để truy cập!!");
+
+        }
+        window.location = "https://localhost:7000/Home/";
+    }
+
+</script>
+
+<form method="post">
+    <input type="hidden" asp-for="FileName" />
+    <button onclick="ShareConfirmDialog(event)" type="button">Share File</button>
+</form>
+
+

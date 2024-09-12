@@ -1,0 +1,35 @@
+﻿@model S3FileDetails
+
+<table>
+    <tr>
+        <th>FileName</th>
+    </tr>
+    <tr>
+        <td>@Html.DisplayFor(model => model.FileName)</td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+
+    function DeleteConfirmDialog(event) {
+
+        var result = confirm("Do you want to continue?");
+
+        if (!result) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+            alert("Không thực hiện xóa file!");
+            
+        } else {
+            
+            alert("Xóa file thành công!");
+        }
+        window.location = "https://localhost:7000/Home/";
+    }
+
+</script>
+
+<form asp-action="DeleteFileToS3">
+    <input type="hidden" asp-for="FileName"/>
+    @* <input type="submit" value="Delete" class="btn btn-warning"/> *@
+    <button onclick="DeleteConfirmDialog(event)">Delete</button>
+</form>

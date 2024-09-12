@@ -1,0 +1,148 @@
+﻿@model List<S3FileDetails>
+
+
+<style>
+    .table-bordered {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            margin-top: 50px;
+            margin-bottom: 50px;
+      }
+
+        .table-bordered th {
+              background-color: #ff9800;
+             
+              font-weight: bold;
+              padding: 10px;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              border-top: 1px solid #fff;
+              border-bottom: 1px solid #ccc;
+        }
+
+        .table-bordered tr:nth-child(even) td {
+              background-color: #f2f2f2;
+        }
+
+        .table-bordered tr:hover td {
+              background-color: #ffedcc;
+        }
+
+        .table-bordered td {
+              background-color: #fff;
+              padding: 10px;
+              border-bottom: 1px solid #ccc;
+              font-weight: bold;
+        }
+
+    #Download{
+        background-color: #CCFF00;
+        color: black;
+    }
+
+    #Delete {
+        background-color: #ff1493;
+        color: black;
+    }
+
+    #Share {
+        background-color: #E5E500;
+        color: black;
+    }
+    
+</style>
+
+
+<script>
+	function handleFileUpload(files) {
+		if (files.length > 0) {
+			// Xử lý tệp tin ở đây, ví dụ: hiển thị tên tệp tin đã chọn
+			let label = document.getElementById("file-label");
+			label.textContent = files[0].name;
+		}
+	}
+</script>
+
+<div id="container">
+	<form enctype="multipart/form-data" method="post" asp-controller="Home"
+		  asp-action="UploadFileToS3" novalidate="" class="box has-advanced-upload">
+	@* <form method="post" enctype="multipart/form-data" novalidate="" class="box has-advanced-upload"> *@
+		<div class="box-input">
+			<svg x="0px" y="0px" viewBox="0 0 64 62" style="enable-background:new 0 0 64 62;" xml:space="preserve">
+				<style type="text/css">
+					.st0 {
+						fill: none;
+						stroke: #fff;
+						stroke-width: 2;
+						stroke-linecap: round;
+						stroke-linejoin: round;
+						stroke-miterlimit: 10;
+					}
+				</style>
+				<g id="spa-launch">
+					<path class="st0" d="M33,27.1h-8c0,0-2-6-2-12c0-8,6-14,6-14s6,6,6,14C35,21.1,33,27.1,33,27.1z" />
+					<line class="st0" x1="29" y1="17.1" x2="29" y2="27.1" />
+					<polyline class="st0" points="25,27.1 17,27.1 17,23.1 23.1,17.1 	" />
+					<polyline class="st0" points="33,27.1 41,27.1 41,23.1 34.9,17.1 	" />
+					<path class="st0" d="M18,41.2c0.5-5.7,5.2-10.1,11-10.1c5.1,0,9.3,3.4,10.6,8.1" />
+					<path class="st0" d="M48,41.1c-0.2-3.4-3.1-6-6.5-6c-1.2,0-2.4,0.3-3.3,0.9" />
+					<path class="st0" d="M42.3,47.1c0,0-1-4-6-4" />
+					<path class="st0" d="M26.3,43.1c-3-1-4,2-4,2s-3-2-5,0s-1,4-1,4" />
+					<path class="st0" d="M9,46.1c-0.8-0.6-1.9-1-3-1c-2.8,0-5,2.2-5,5s2.2,5,5,5h46c2.8,0,5-2.2,5-5c0-5-4-9-9-9
+											c-0.9,0-1.8,0.1-2.6,0.4" />
+					<path class="st0" d="M18.8,37.9c-1.1-0.5-2.4-0.8-3.8-0.8c-4.6,0-8.5,3.5-8.9,8" />
+				</g>
+			</svg>
+			<br>
+
+			<label for="file" id="file-label"><strong>Choose a file upload to Amazon S3</strong>.</label>
+			<input type="file" name="file" id="file" onchange="handleFileUpload(this.files)" />
+			<br>
+			@* <input type="file" name="file" id="file"/>
+			<label for="file"><strong>Choose a file upload to Amazon S3</strong>.</label> *@
+			<input class="btn btn-success" type="submit" value="Upload" />
+		</div>
+
+		<div class="box-uploading">Uploading…</div>
+		<div class="box-success">Done! <a href="https://css-tricks.com/examples/DragAndDropFileUploading//?submit-on-demand" class="box-restart" role="button" data-unsp-sanitized="clean">Upload more?</a></div>
+		<div class="box-error">Error! <span></span>. <a href="https://css-tricks.com/examples/DragAndDropFileUploading//?submit-on-demand" class="box-restart" role="button" data-unsp-sanitized="clean">Try again!</a></div>
+		<input type="hidden" name="ajax" value="1">
+	</form>
+
+</div>
+
+
+<label>File Upload To S3 Bucket</label>
+<br />
+
+<table class="table table-bordered">
+    <tr>
+        <td align="center">Date</td>
+        @* <td align="center">Hình ảnh</td> *@
+        <td align="center">File Name</td>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.FileDate</td>
+            @* <td align="center">
+                <img src="https://buckets3-project.s3.amazonaws.com/@item.FileName" width="200px" height="200px">
+            </td> *@
+            <td>@item.FileName</td>
+            <td >
+                <a asp-action="ViewFileForDownload" asp-route-id="@item.ID"><i class="btn btn-secondary" id="Download">Download</i></a>
+                <a asp-action="DeleteFile" asp-route-id="@item.ID"><i class="btn btn-secondary" id="Delete">Delete</i></a>
+                <a asp-action="ShareFile" asp-route-id="@item.ID"><i class="btn btn-secondary" id="Share">Share</i></a>
+            </td>
+        </tr>
+    }
+</table>
+

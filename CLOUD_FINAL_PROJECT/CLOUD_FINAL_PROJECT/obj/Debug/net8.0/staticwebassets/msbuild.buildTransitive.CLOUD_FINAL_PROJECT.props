@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\CLOUD_FINAL_PROJECT.props" />
+</Project>
